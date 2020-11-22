@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="stdout" target="system_out">
+            <PatternLayout pattern="%d %-5p%-6r--- [%15.15t] %-40.40C : %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="logger" level="info"/>
+        <Root level="debug">
+            <AppenderRef ref="stdout"/>
+        </Root>
+    </Loggers>
+</Configuration>

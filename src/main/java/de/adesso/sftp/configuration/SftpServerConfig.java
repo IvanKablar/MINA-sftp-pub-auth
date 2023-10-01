@@ -1,16 +1,15 @@
 package de.adesso.sftp.configuration;
 
 import de.adesso.sftp.authentication.SftpPublicKeyAuthenticator;
+import jakarta.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
 import org.apache.sshd.server.SshServer;
 import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
-import org.apache.sshd.server.subsystem.sftp.SftpSubsystemFactory;
+import org.apache.sshd.sftp.server.SftpSubsystemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -24,12 +23,10 @@ public class SftpServerConfig {
     private SshServer sshd;
     @Value("${hostkey}")
     private String hostKey;
-    private ResourceLoader resourceLoader;
-    private SftpPublicKeyAuthenticator sftpPublicKeyAuthenticator;
+    private final SftpPublicKeyAuthenticator sftpPublicKeyAuthenticator;
 
     @Autowired
-    public SftpServerConfig(ResourceLoader resourceLoader, SftpPublicKeyAuthenticator sftpPublicKeyAuthenticator) {
-        this.resourceLoader = resourceLoader;
+    public SftpServerConfig(SftpPublicKeyAuthenticator sftpPublicKeyAuthenticator) {
         this.sftpPublicKeyAuthenticator = sftpPublicKeyAuthenticator;
     }
 

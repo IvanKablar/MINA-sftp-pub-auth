@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Hat Zugriff auf die Benutzerkonfiguration für einen Benutzer aus den application.properties und die Public-Key Datei.
@@ -18,8 +18,8 @@ import java.nio.charset.Charset;
 public class UserService {
 
     private static final Logger log = LogManager.getLogger(UserService.class);
-    private ResourceLoader resourceLoader;
-    private User user;
+    private final ResourceLoader resourceLoader;
+    private final User user;
 
     public UserService(ResourceLoader resourceLoader, User user) {
         this.resourceLoader = resourceLoader;
@@ -35,7 +35,7 @@ public class UserService {
     public String getUserKey(User user) {
         Resource resource =  this.resourceLoader.getResource(user.getPubkey());
         try (InputStream in = resource.getInputStream()) {
-            return IOUtils.toString(in, Charset.forName("UTF-8"));
+            return IOUtils.toString(in, StandardCharsets.UTF_8);
         } catch (IOException e) {
             log.warn("Fehler beim Lesen des Public-Key für Benutzer '{}'", user.getName());
             return null;

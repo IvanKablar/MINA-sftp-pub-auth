@@ -19,8 +19,8 @@ import java.security.PublicKey;
 public class SftpPublicKeyAuthenticator implements PublickeyAuthenticator {
 
     private static final Logger log = LogManager.getLogger(SftpPublicKeyAuthenticator.class);
-    private PublicKeyService publicKeyService;
-    private UserService userService;
+    private final PublicKeyService publicKeyService;
+    private final UserService userService;
 
     public SftpPublicKeyAuthenticator(PublicKeyService publicKeyService, UserService userService) {
         this.publicKeyService = publicKeyService;

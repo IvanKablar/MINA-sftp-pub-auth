@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Objects;
 
 @Configuration
-@ConfigurationProperties(prefix = "user")
+@ConfigurationProperties(prefix = "sftp.user")
 public class User {
     private String pubkey;
     private String name;

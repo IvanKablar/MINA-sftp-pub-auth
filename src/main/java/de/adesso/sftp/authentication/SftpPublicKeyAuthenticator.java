@@ -4,7 +4,6 @@ import de.adesso.sftp.user.User;
 import de.adesso.sftp.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.sshd.common.config.keys.PublicKeyEntry;
 import org.apache.sshd.server.auth.AsyncAuthException;
 import org.apache.sshd.server.auth.pubkey.PublickeyAuthenticator;
 import org.apache.sshd.server.session.ServerSession;
@@ -28,23 +27,23 @@ public class SftpPublicKeyAuthenticator implements PublickeyAuthenticator {
     }
 
     /**
-     * Prüft, ob der vom Client geschickte Benutzername und Public-Key auf dem Server konfiguriert wurden und der
-     * vom client geschickte Public-Key gültig ist.
+     * Prüft, ob der vom Client geschickte Benutzername und Public-Key auf dem Server konfiguriert wurden.
+     * Das Framework ruft diese Methode zweimal auf: zuerst für die Anfrage ohne Signatur (RFC 4252, Abschnitt 7)
+     * und anschließend für die eigentliche Authentifizierung mit Signatur. Die Signatur prüft das Framework selbst.
      *
      * @param username der vom Client geschickte Benutzername.
      * @param publicKey der vom Client geschickte Public-Key
      * @param serverSession die Server Session
-     * @return true, falls die Authentifizierung erfolgreich war, sonst false
+     * @return true, falls der Public-Key zum Benutzer passt, sonst false
      * @throws AsyncAuthException falls zur Laufzeit ein Fehler auftritt.
      */
     @Override
     public boolean authenticate(String username, PublicKey publicKey, ServerSession serverSession) throws AsyncAuthException {
-        User user =  userService.getUser(username);
-        if(user== null) {
+        User user = userService.getUser(username);
+        if (user == null) {
             log.warn("Kein Benutzer mit Namen '{}' konfiguriert", username);
             return false;
         }
-        return publicKeyService.isPublicKeyValid(userService.getUserKey(user), PublicKeyEntry.toString(publicKey), serverSession);
+        return publicKeyService.isPublicKeyValid(userService.getUserKey(user), publicKey, serverSession);
     }
-
 }
